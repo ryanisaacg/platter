@@ -1,0 +1,15 @@
+[package]
+name = "quick-files"
+version = "0.1.0"
+authors = ["Ryan Goldstein <ryanisaacg@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+futures-preview = { version = "=0.3.0-alpha.17" }
+serde = "1"
+serde_json = "1"
+stdweb = { version = "0.4.17", optional = true }
+web-sys = { version = "0.3.24", optional = true }
+
+[target.'cfg(not(any(feature = "stdweb", feature = "web-sys")))'.dependencies]
+dirs = "1"
