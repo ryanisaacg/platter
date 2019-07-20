@@ -106,14 +106,10 @@ pub fn load_raw(location: Location, appname: &str, profile: &str) -> Result<Vec<
 
 // Select which platform implementation to use based on provided features
 
-#[cfg(not(any(feature = "stdweb", feature = "web-sys")))]
+#[cfg(not(target_arch = "wasm32"))]
 #[path = "desktop.rs"]
 mod platform;
 
-#[cfg(feature = "stdweb")]
-#[path = "desktop.rs"]
-mod platform;
-
-#[cfg(feature = "web-sys")]
-#[path = "desktop.rs"]
+#[cfg(target_arch = "wasm32")]
+#[path = "web.rs"]
 mod platform;
