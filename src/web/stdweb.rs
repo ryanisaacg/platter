@@ -2,19 +2,26 @@ use futures::future::{TryFutureExt, ready, poll_fn};
 use std::{
     future::Future,
     io::{Error as IOError, ErrorKind},
-    task::Poll,
+    task::{Context, Poll},
 };
 use stdweb::{
     Reference,
     InstanceOf,
     unstable::TryInto,
-    web::{XmlHttpRequest, ArrayBuffer, TypedArray, XhrReadyState, XhrResponseType, window},
+    traits::*,
+    web::{
+        XmlHttpRequest, ArrayBuffer, TypedArray, XhrReadyState, XhrResponseType, window,
+        event::{ProgressAbortEvent, ProgressLoadEvent},
+    },
 };
 use super::SaveError;
 
 pub fn make_request(path: &str) -> impl Future<Output = Result<Vec<u8>, IOError>> {
     ready(create_request(path))
-        .and_then(|xhr| poll_fn(move |_| poll_request(&xhr)))
+        .and_then(|xhr| {
+            let mut have_set_handlers = false;
+            poll_fn(move |ctx| poll_request(&xhr, ctx, &mut have_set_handlers))
+        })
 }
 
 fn create_request(path: &str) -> Result<XmlHttpRequest, IOError> {
@@ -26,7 +33,14 @@ fn create_request(path: &str) -> Result<XmlHttpRequest, IOError> {
     Ok(xhr)
 }
 
-fn poll_request(xhr: &XmlHttpRequest) -> Poll<Result<Vec<u8>, IOError>> {
+fn poll_request(xhr: &XmlHttpRequest, ctx: &mut Context, have_set_handlers: &mut bool) -> Poll<Result<Vec<u8>, IOError>> {
+    if !*have_set_handlers {
+        *have_set_handlers = true;
+        let waker = ctx.waker().clone();
+        xhr.add_event_listener(move |_: ProgressLoadEvent| waker.wake_by_ref());
+        let waker = ctx.waker().clone();
+        xhr.add_event_listener(move |_: ProgressAbortEvent| waker.wake_by_ref());
+    }
     let status = xhr.status();
     let ready_state = xhr.ready_state();
     match (status / 100, ready_state) {
