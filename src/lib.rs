@@ -48,7 +48,7 @@ pub enum Location {
 /// parameter to `load` so Rust cannot infer the type.
 ///
 /// ```
-/// # use self::{save, load};
+/// use quick_fs::{Location, save, load};
 /// use serde::{Serialize, Deserialize};
 ///
 /// #[derive(Serialize, Deserialize)]
