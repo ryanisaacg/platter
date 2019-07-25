@@ -1,13 +1,6 @@
 language: rust
 os:
   - linux
-  - osx
-addons:
-  apt:
-    packages:
-      - libasound2-dev
-      - libudev-dev
-      - libssl-dev
 env:
   global:
     - RUST_BACKTRACE=1
@@ -25,6 +18,12 @@ matrix:
         - cargo install -f cargo-web
       script:
         - cargo web check --features stdweb
+    - rust: stable
+      env: WASM=2
+      install:
+        - rustup target add wasm32-unknown-unknown
+      script:
+        - cargo check --target wasm32-unknown-unknown --features web_sys
   allow_failures:
     - rust: nightly
   fast_finish: true
