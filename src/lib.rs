@@ -8,6 +8,8 @@ use std::{
 mod error;
 pub use self::error::SaveError;
 
+pub use serde;
+
 /// Create a Future that loads a file into an owned Vec of bytes
 ///
 /// It exists for loading files from the server with Javascript on the web, and providing a unified
