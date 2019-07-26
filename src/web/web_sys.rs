@@ -9,8 +9,8 @@ use wasm_bindgen::{
     JsCast,
     closure::Closure,
 };
-use web_sys::{XmlHttpRequest, XmlHttpRequestResponseType, window};
-use super::{SaveError, new_wasm_error, web_try};
+use web_sys::{XmlHttpRequest, XmlHttpRequestResponseType};
+use super::{new_wasm_error, web_try};
 
 pub fn make_request(path: &str) -> impl Future<Output = Result<Vec<u8>, IOError>> {
     ready(create_request(path))
@@ -46,7 +46,7 @@ fn poll_request(xhr: &XmlHttpRequest, ctx: &mut Context, have_set_handlers: &mut
                     let array = Uint8Array::new(&resp);
                     let mut buffer = vec![0; array.length() as usize];
                     array.copy_to(&mut buffer[..]);
-                    
+
                     buffer
                 }))
         },
@@ -57,32 +57,3 @@ fn poll_request(xhr: &XmlHttpRequest, ctx: &mut Context, have_set_handlers: &mut
 
 }
 
-pub fn set_storage(is_local: bool, profile: &str, value: &str) -> Result<(), SaveError> {
-    let window = window().expect("Failed to get window object");
-    let storage = if is_local {
-        window.local_storage()
-    } else {
-        window.session_storage()
-    };
-    let storage = storage
-        .map_err(|_| SaveError::SaveLocationNotFound)?
-        .ok_or(SaveError::SaveLocationNotFound)?;
-    
-    storage.set(profile, value).map_err(|_| SaveError::SaveWriteFailed)
-}
-
-pub fn get_storage(is_local: bool, profile: &str) -> Result<String, SaveError> {
-    let window = window().expect("Failed to get window object");
-    let storage = if is_local {
-        window.local_storage()
-    } else {
-        window.session_storage()
-    };
-    let storage = storage
-        .map_err(|_| SaveError::SaveLocationNotFound)?
-        .ok_or(SaveError::SaveLocationNotFound)?;
-    
-    storage.get(profile)
-        .map_err(|_| SaveError::SaveLocationNotFound)?
-        .ok_or_else(|| SaveError::SaveNotFound(profile.to_string()))
-}

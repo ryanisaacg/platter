@@ -9,11 +9,11 @@ use stdweb::{
     unstable::TryInto,
     traits::*,
     web::{
-        XmlHttpRequest, ArrayBuffer, TypedArray, XhrReadyState, XhrResponseType, window,
+        XmlHttpRequest, ArrayBuffer, TypedArray, XhrReadyState, XhrResponseType,
         event::{ProgressAbortEvent, ProgressLoadEvent},
     },
 };
-use super::{SaveError, new_wasm_error, web_try};
+use super::{new_wasm_error, web_try};
 
 pub fn make_request(path: &str) -> impl Future<Output = Result<Vec<u8>, IOError>> {
     ready(create_request(path))
@@ -56,24 +56,4 @@ fn poll_request(xhr: &XmlHttpRequest, ctx: &mut Context, have_set_handlers: &mut
         _ => Poll::Ready(Err(new_wasm_error("Non-200 status code returned")))
     }
 
-}
-
-pub fn set_storage(is_local: bool, profile: &str, value: &str) -> Result<(), SaveError> {
-    let storage = if is_local {
-        window().local_storage()
-    } else {
-        window().session_storage()
-    };
-    
-    storage.insert(profile, value).map_err(|_| SaveError::SaveWriteFailed)
-}
-
-pub fn get_storage(is_local: bool, profile: &str) -> Result<String, SaveError> {
-    let storage = if is_local {
-        window().local_storage()
-    } else {
-        window().session_storage()
-    };
-    
-    storage.get(profile).ok_or_else(|| SaveError::SaveNotFound(profile.to_string()))
 }
