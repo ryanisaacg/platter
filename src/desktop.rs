@@ -15,4 +15,3 @@ fn load_data(path: impl AsRef<Path>) -> Result<Vec<u8>, IOError> {
 
     Ok(data)
 }
-

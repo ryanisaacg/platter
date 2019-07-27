@@ -19,7 +19,10 @@ mod backend;
 mod backend;
 
 pub fn load_file(path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>, IOError>> {
-    let path = path.as_ref().to_str().expect("The path must be able to be stringified");
+    let path = path
+        .as_ref()
+        .to_str()
+        .expect("The path must be able to be stringified");
 
     backend::make_request(path)
 }
@@ -27,7 +30,7 @@ pub fn load_file(path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>,
 fn web_try<T, E>(result: Result<T, E>, error: &str) -> Result<T, IOError> {
     match result {
         Ok(val) => Ok(val),
-        Err(_) => Err(new_wasm_error(error))
+        Err(_) => Err(new_wasm_error(error)),
     }
 }
 

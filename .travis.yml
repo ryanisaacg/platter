@@ -12,18 +12,32 @@ rust:
 matrix:
   include:
     - rust: stable
-      env: WASM=1
+      env: JOB="format"
+      before_script:
+        - rustup component add rustfmt
+      script:
+        - cargo fmt -- --check
+    - rust: stable
+      env: JOB="clippy"
+      before_script:
+        - rustup component add clippy
+      script:
+        - cargo clippy
+    - rust: stable
+      env: JOB="stdweb"
       install:
         - rustup target add wasm32-unknown-unknown
         - cargo install -f cargo-web
       script:
         - cargo web check --features stdweb
     - rust: stable
-      env: WASM=2
+      env: JOB="web-sys"
       install:
         - rustup target add wasm32-unknown-unknown
+        - rustup component add clippy
       script:
         - cargo check --target wasm32-unknown-unknown --features web_sys
+        - cargo clippy --target wasm32-unknown-unknown --features web_sys
   allow_failures:
     - rust: nightly
   fast_finish: true

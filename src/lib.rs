@@ -1,8 +1,4 @@
-use std::{
-    future::Future,
-    io::Error as IOError,
-    path::Path
-};
+use std::{future::Future, io::Error as IOError, path::Path};
 
 /// Create a Future that loads a file into an owned Vec of bytes
 ///
