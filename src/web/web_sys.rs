@@ -1,5 +1,6 @@
 use super::{new_wasm_error, web_try};
-use futures::future::{poll_fn, ready, TryFutureExt};
+use futures_util::future::{poll_fn, ready};
+use futures_util::try_future::TryFutureExt;
 use js_sys::Uint8Array;
 use std::{
     future::Future,

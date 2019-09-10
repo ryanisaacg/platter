@@ -6,7 +6,7 @@ use std::{
 };
 
 pub fn load_file(path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>, IOError>> {
-    futures::future::ready(load_data(path))
+    futures_util::future::ready(load_data(path))
 }
 
 fn load_data(path: impl AsRef<Path>) -> Result<Vec<u8>, IOError> {

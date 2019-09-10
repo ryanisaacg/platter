@@ -5,16 +5,18 @@ authors = ["Ryan Goldstein <ryanisaacg@gmail.com>"]
 edition = "2018"
 
 [features]
-"web_sys" = ["web-sys", "js-sys", "wasm-bindgen"]
+"web-sys" = ["web_sys", "js-sys", "wasm-bindgen"]
 
-[dependencies]
-futures-preview = { version = "=0.3.0-alpha.17" }
+[dependencies.futures-util-preview]
+version = "0.3.0-alpha"
+default-features = false
 
 [target.'cfg(target_arch = "wasm32")'.dependencies.stdweb]
-version = "0.4.17"
+version = "0.4.18"
 optional = true
 
-[target.'cfg(target_arch = "wasm32")'.dependencies.web-sys]
+[target.'cfg(target_arch = "wasm32")'.dependencies.web_sys]
+package = "web-sys"
 version = "0.3.24"
 optional = true
 features = [
