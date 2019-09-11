@@ -36,8 +36,8 @@ matrix:
         - rustup target add wasm32-unknown-unknown
         - rustup component add clippy
       script:
-        - cargo check --target wasm32-unknown-unknown --features web_sys
-        - cargo clippy --target wasm32-unknown-unknown --features web_sys
+        - cargo check --target wasm32-unknown-unknown --features web-sys
+        - cargo clippy --target wasm32-unknown-unknown --features web-sys
   allow_failures:
     - rust: nightly
   fast_finish: true
