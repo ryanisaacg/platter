@@ -1,3 +1,16 @@
+//! A simple utility to unify loading files on desktop and web
+//!
+//! On desktop, `load_file` is backed by native file system APIs.
+//! On web, it is backed by an HTTP 'GET' request.
+
+#![deny(
+    bare_trait_objects,
+    missing_docs,
+    unused_extern_crates,
+    unused_import_braces,
+    unused_qualifications
+)]
+
 use std::{future::Future, io::Error as IOError, path::Path};
 
 /// Create a Future that loads a file into an owned Vec of bytes
