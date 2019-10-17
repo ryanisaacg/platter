@@ -1,7 +1,8 @@
-//! A simple utility to unify loading files on desktop and web
+//! A simple utility to serve you files on a `platter`
 //!
-//! On desktop, `load_file` is backed by native file system APIs.
-//! On web, it is backed by an HTTP 'GET' request.
+//! `platter` works on both desktop and web, and returns a byte buffer of the file's contents.
+//! On desktop, `load_file` is backed by native file system APIs. On web, it is backed by an
+//! HTTP 'GET' request.
 
 #![deny(
     bare_trait_objects,
