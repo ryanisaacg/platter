@@ -1,17 +1,11 @@
 use std::{
-    fs::File,
+    fs::read,
     future::Future,
-    io::{Error as IOError, Read},
+    io::Error as IOError,
     path::Path,
 };
 
 pub fn load_file(path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>, IOError>> {
-    futures_util::future::ready(load_data(path))
+    futures_util::future::ready(read(path))
 }
 
-fn load_data(path: impl AsRef<Path>) -> Result<Vec<u8>, IOError> {
-    let mut data = Vec::new();
-    File::open(path)?.read_to_end(&mut data)?;
-
-    Ok(data)
-}
