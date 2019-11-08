@@ -9,13 +9,12 @@ edition = "2018"
 [features]
 "web-sys" = ["web_sys", "js-sys", "wasm-bindgen"]
 
-[dependencies.futures-util-preview]
-version = "0.3.0-alpha"
-default-features = false
+[dependencies]
+futures-util = { version = "0.3.0", default-features = false }
+stdweb = { version = "0.4.18", optional = true }
 
-[target.'cfg(target_arch = "wasm32")'.dependencies.stdweb]
-version = "0.4.18"
-optional = true
+js-sys = { version = "0.3.25", optional = true }
+wasm-bindgen = { version = "0.2.48", optional = true }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies.web_sys]
 package = "web-sys"
@@ -27,10 +26,3 @@ features = [
     "XmlHttpRequestResponseType",
 ]
 
-[target.'cfg(target_arch = "wasm32")'.dependencies.js-sys]
-version = "0.3.25"
-optional = true
-
-[target.'cfg(target_arch = "wasm32")'.dependencies.wasm-bindgen]
-version = "0.2.48"
-optional = true
