@@ -19,7 +19,7 @@ jobs:
     - name: Clippy desktop
       run: cargo clippy -- -D warnings
     - name: Clippy stdweb
-      run: cargo clippy --features stdweb -- -D warnings
+      run: cargo clippy --target wasm32-unknown-unknown --features stdweb -- -D warnings
     - name: Clippy web-sys
-      run: cargo clippy --features web-sys -- -D warnings
+      run: cargo clippy --target wasm32-unknown-unknown --features web-sys -- -D warnings
 
