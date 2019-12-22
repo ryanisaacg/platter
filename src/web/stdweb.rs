@@ -1,6 +1,5 @@
 use super::{new_wasm_error, web_try};
-use futures_util::future::{poll_fn, ready};
-use futures_util::try_future::TryFutureExt;
+use futures_util::future::{poll_fn, ready, TryFutureExt};
 use std::{
     future::Future,
     io::Error as IOError,
