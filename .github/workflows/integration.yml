@@ -8,6 +8,18 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         rust: [stable, nightly]
     steps:
-    - uses: ryanisaacg/setup-qs-action@master
+    - uses: hecrj/setup-rust-action@v1.2.0
       with:
         rust-version: ${{ matrix.rust }}
+        components: clippy,rustfmt
+        targets: wasm32-unknown-unknown
+    - uses: actions/checkout@master
+    - name: Check formatting
+      run: cargo fmt -- --check
+    - name: Clippy desktop
+      run: cargo clippy -- -D -warnings
+    - name: Clippy stdweb
+      run: cargo clippy --features stdweb -- -D -warnings
+    - name: Clippy web-sys
+      run: cargo clippy --features web-sys -- -D -warnings
+
