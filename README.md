@@ -9,3 +9,7 @@ HTTP 'GET' request.
 ```rust
 let file_contents = load_file("path_to_my_file").await?;
 ```
+
+## Web Support
+
+To use `platter` on the web, enable either the `web-sys` feature (for `wasm-pack` and `wasm-bindgen` workflows) or the `stdweb` feature (for `stdweb` and `cargo-web` workflows).
