@@ -33,9 +33,10 @@ fn poll_request(
         *have_set_handlers = true;
         let waker = ctx.waker().clone();
         let wake_up = Closure::wrap(Box::new(move || waker.wake_by_ref()) as Box<dyn FnMut()>);
-        let wake_up = wake_up.as_ref().unchecked_ref();
-        xhr.set_onload(Some(&wake_up));
-        xhr.set_onerror(Some(&wake_up));
+        let wake_up_ref = wake_up.as_ref().unchecked_ref();
+        xhr.set_onload(Some(&wake_up_ref));
+        xhr.set_onerror(Some(&wake_up_ref));
+        wake_up.forget();
     }
     let status = xhr
         .status()
